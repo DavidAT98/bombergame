@@ -31,12 +31,47 @@ function Partida(nombre,idp){
 	this.nombre=nombre;
 	this.idp=idp;		
 	this.jugadores=[];
+	this.fase=new Inicial();
 	this.agregarJugador=function(usr){
+		this.fase.agregarJugador(usr, this);
+	}
+	this.puedeAgregarJugador=function(usr){
 		this.jugadores[usr.nick]=usr;
 	}
+	this.salir=function(nombrePartida,nick){
+		this.partidas[nombrePartida].salir(nick);
+		if (this.comprobarJugadores(nombrePartida)==0)´{
+			this.eliminarPartida(nombrePartida);
+		}
+	}
+	this.comprobarJugadores=function(nombrePartida){
+		return Object.keys(this.partidas[nombrePartida].jugadores).length;
+	}
+	this.eliminarPartida=function(nombrePartida){
+		delete this.partidas[nombrePartida];
+	}
+}
+
+function Inicial(){
+	this.nombre="inicial";
+	this.agregarJugador=function(usr,partida){
+		partida.puedeAgregarJugador(usr);
+	}
+}
+
+function Jugando(){
+	this.nombre="jugando";
+	this.agregarJugador=function(usr,partida){
+		console.log("El juego ya ha comenzado");
+	}
+}7
+
+function Final(){
+	this.nombre="final";
 }
 
 function Usuario(nick){
 	this.nick=nick;
 	this.id=undefined;
 }
+
